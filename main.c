@@ -9,16 +9,17 @@
 
 #include <stdio.h>
 
-void menuSobre(void);
+void TelaInicial(void);
+;
 
 int main(void) {
-    menuSobre();
-    return 0;
+    TelaInicial();
+		return 0;
 
 }
 
 
-void menuSobre(void) {
+void TelaInicial(void) {
 printf("//////////////////////////////////////////////////////////////////////////////////////////\n"
 "///                                                                                    ///\n"
 "///             Universidade Federal do Rio Grande do Norte                            ///\n"
@@ -37,6 +38,12 @@ printf("////////////////////////////////////////////////////////////////////////
 "///  realize o registro e o acompanhamento de operações financeiras de várias contas   ///\n"
 "///  bancárias, simulando as atividades que possam ocorrem em um banco real.           ///\n"
 "///                                                                                    ///\n"
-"//////////////////////////////////////////////////////////////////////////////////////////\n");
+"//////////////////////////////////////////////////////////////////////////////////////////\n\n");
+char nomecliente[61];
+
+printf("Saudações, caro cliente! Por favor, informe seu nome: ");
+scanf("%s",nomecliente);     
+
+printf("\nBem-vindo ao SIG-Banking, %s!\n",nomecliente);  
 }
 
