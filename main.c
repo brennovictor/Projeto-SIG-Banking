@@ -10,129 +10,54 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void telaSobre(void);
 char menuPrincipal(void);
+void moduloInformaçoes(void);
+void telaSobre(void);
 
+void moduloCliente(void);
 char menuCliente(void);
 void telaCadastrarCliente(void);
 void telaPesquisarCliente(void);
 char telaAtualizarCliente(void);
 void telaExcluirCliente(void);
 
+void moduloContas(void);
 char menuContas(void);
 void telaCadastrarConta(void);
 void telaPesquisarConta(void);
 char telaAtualizarConta(void);
 void telaExcluirConta(void);
 
+void moduloMovimentos(void);
 char menuMovimentos(void);
 void telaRealizarSaque(void);
 void telaRealizarDeposito(void);
 void telaConstultarSaldo(void);
 
 int main(void) {
-
-    char opçao1, opçao2, opçao3, opçao4;
-
-    do{
-        opçao1 = menuPrincipal();
-
-        switch (opçao1){
-            case '1':
-                do{                   
-                    opçao2 = menuCliente();
-
-                    switch (opçao2){
-                        case '1':
-                            telaCadastrarCliente();
-                            break;
-                        case '2':
-                            telaPesquisarCliente();
-                            break;
-                        case '3':
-                            telaAtualizarCliente();
-                            break;
-                        case '4':
-                            telaExcluirCliente();
-                            break;
-                    }
-
-                }while(opçao2 != '0');
-                break;
-
-            case '2':
-                do{
-                    opçao3 = menuContas();
-
-                    switch (opçao3){
-                        case '1':
-                            telaCadastrarConta();
-                            break;
-                        case '2':
-                            telaPesquisarConta();
-                            break;
-                        case '3':
-                            telaAtualizarConta();
-                            break;
-                        case '4':
-                            telaExcluirConta();
-                            break;
-                    }
-
-                } while (opçao3 != '0');
-                break;
-
-            case '3':
-                do{
-                    opçao4 = menuMovimentos();
-
-                    switch (opçao4){
-                        case '1':
-                            telaRealizarSaque();
-                            break;
-                        case '2':
-                            telaRealizarDeposito();
-                            break;
-                        case '3':
-                            telaConstultarSaldo();
-                            break;
-                    }
-
-                } while(opçao4 != '0');
-                break;
-                
-            case '4':
-                telaSobre();
-                break;
-
-        } 
-
-    }while(opçao1 != '0');
-	printf("Programa encerrado! Volte sempre ao SIG-Banking!\n\n");
-    return 0;
-
+	char opçao;
+	do{                   
+		opçao = menuPrincipal();
+		switch (opçao){
+			case '1':	moduloCliente();
+						break;
+			case '2':	moduloContas();
+						break;
+			case '3':	moduloMovimentos();
+						break;
+			case '4':	moduloInformaçoes();
+						break;
+					}
+		} while(opçao != '0');
+		printf("Programa encerrado! Volte sempre ao SIG-Banking!\n\n");
+    	return 0;
 }
 
-	// telaSobre();
-	// menuPrincipal();
-	
-	// menuCliente();
-	// telaCadastrarCliente();
-	// telaPesquisarCliente();
-	// telaAtualizarCliente();
-	// telaExcluirCliente();
-	
-	// menuContas();
-	// telaCadastrarConta();
-	// telaPesquisarConta();
-	// telaAtualizarConta();
-	// telaExcluirConta();
-	
-	
-	// menuMovimentos();
-	// telaRealizarSaque();
-	// telaRealizarDeposito();
-	// telaConstultarSaldo();
+
+
+void moduloInformaçoes(void) {
+	telaSobre();
+}
 
 
 void telaSobre(void) {
@@ -192,6 +117,23 @@ char menuPrincipal(void) {
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
 	"\n");
 	return op;
+}
+
+void moduloCliente(void) {
+	char opçao;
+	do{                   
+		opçao = menuCliente();
+		switch (opçao){
+			case '1':	telaCadastrarCliente();
+						break;
+			case '2':	telaPesquisarCliente();
+						break;
+			case '3':	telaAtualizarCliente();
+						break;
+			case '4':	telaExcluirCliente();
+						break;
+					}
+		} while(opçao != '0');
 }
 
 
@@ -392,6 +334,23 @@ void telaExcluirCliente(void) {
 	// "//////////////////////////////////////////////////////////////////////////////////////////\n"
 	///ELSE CONTINUE
 
+void moduloContas(void) {
+	char opçao;
+	do{                   
+		opçao = menuContas();
+		switch (opçao){
+			case '1':	telaCadastrarConta();
+						break;
+			case '2':	telaPesquisarConta();
+						break;
+			case '3':	telaAtualizarConta();
+						break;
+			case '4':	telaExcluirConta();
+						break;
+					}
+		} while(opçao != '0');
+}
+
 
 char menuContas(void) {
 	char op;
@@ -501,6 +460,7 @@ void telaPesquisarConta(void) {
 	// "//////////////////////////////////////////////////////////////////////////////////////////\n"
 
 
+
 char telaAtualizarConta(void) {
 	char op;
 	char numeroConta[10];
@@ -588,6 +548,22 @@ void telaExcluirConta(void) {
 	// "///                                                                                    ///\n"
 	// "//////////////////////////////////////////////////////////////////////////////////////////\n"
 	///ELSE CONTINUE
+
+
+void moduloMovimentos(void) {
+	char opçao;
+	do{                   
+		opçao = menuMovimentos();
+		switch (opçao){
+			case '1':	telaRealizarSaque();
+						break;
+			case '2':	telaRealizarDeposito();
+						break;
+			case '3':	telaConstultarSaldo();
+						break;
+					}
+		} while(opçao != '0');
+}
 
 
 char menuMovimentos(void) {
@@ -708,6 +684,7 @@ void telaRealizarDeposito(void) {
 	// "///            Depósito de R$ X,00 Realizado com sucesso                               ///\n"
 	// "///                                                                                    ///\n"
 	// "//////////////////////////////////////////////////////////////////////////////////////////\n"
+
 
 void telaConstultarSaldo(void) {
 	char numeroAgencia[6];
