@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "funcoesValidacao.h"
 
 void moduloCliente(void);
 char menuCliente(void);
@@ -69,8 +70,8 @@ char menuCliente(void) {
 void telaCadastrarCliente(void) {
 	char nome[51];
 	char cpf[12];
-	char nasc[11];
-	
+	int cpfValido;
+	int dia, mes, ano, dataValida;
 	system("clear");
 	printf("\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -91,10 +92,55 @@ void telaCadastrarCliente(void) {
 	"               CPF (apenas números): ");
 	scanf("%[0-9]", cpf);
 	getchar();
+	cpfValido = validaCPF(cpf);
+	while (cpfValido == 0) {
+		printf("\n"
+		"               O cpf informado é inválido. Por favor, tente novamente...\n");
+		printf("\n"
+		"               CPF (apenas números): ");
+		scanf("%[0-9]", cpf);
+		getchar();
+		cpfValido = validaCPF(cpf);
+	}
 	printf("\n"
-	"               Data de Nascimento (dd/mm/aaaa):  ");
-	scanf("%[0-9/]", nasc);
+	"               cpf cadastrado com sucesso!\n");
+
+	printf("\n"
+	"               Data de nascimento:\n");
+	printf("\n"
+	"               Informe o dia: ");
+	scanf("%d", &dia);
 	getchar();
+	printf("\n"
+	"               Informe o mês: ");
+	scanf("%d", &mes);
+	getchar();
+	printf("\n"
+	"               Informe o ano: ");
+	scanf("%d", &ano);
+	getchar();
+	dataValida = validaData(dia, mes, ano);
+	while (dataValida == 0) {
+		printf("\n"
+		"               A data informada é inválida. Por favor, tente novamente...\n");
+		printf("\n"
+		"               Data de nascimento:\n");
+		printf("\n"
+		"               Informe o dia: ");
+		scanf("%d", &dia);
+		getchar();
+		printf("\n"
+		"               Informe o mês: ");
+		scanf("%d", &mes);
+		getchar();
+		printf("\n"
+		"               Informe o ano: ");
+		scanf("%d", &ano);
+		getchar();
+		dataValida = validaData(dia, mes, ano);		
+	}
+	printf("\n"
+	"               Data cadastrada com sucesso!\n");
 	printf("\n"
 	"///                                                                                    ///\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -108,6 +154,7 @@ void telaCadastrarCliente(void) {
 // Essa função permite ao usuário pesquisar um cliente que esteja cadastrado
 void telaPesquisarCliente(void) {
 	char cpf[12];
+	int cpfValido;
 	system("clear");
 	printf("\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -124,7 +171,17 @@ void telaPesquisarCliente(void) {
 	printf("\n"
 	"               CPF (apenas números): ");
 	scanf("%[0-9]", cpf);
-	getchar();                                                                                  
+	getchar();
+	cpfValido = validaCPF(cpf);
+	while (cpfValido == 0) {
+		printf("\n"
+		"               O cpf informado é inválido. Por favor, tente novamente...\n");
+		printf("\n"
+		"               CPF (apenas números): ");
+		scanf("%[0-9]", cpf);
+		getchar();
+		cpfValido = validaCPF(cpf);
+	}                                                         
 	printf("\n"
 	"///                                                                                    ///\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -148,6 +205,7 @@ void telaPesquisarCliente(void) {
 char telaAtualizarCliente(void) {
 	char op;
 	char cpf[12];
+	int cpfValido;
 	system("clear");
 	printf("\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -165,6 +223,16 @@ char telaAtualizarCliente(void) {
 	"               CPF (apenas números): ");
 	scanf("%[0-9]", cpf);
 	getchar();
+	cpfValido = validaCPF(cpf);
+	while (cpfValido == 0) {
+		printf("\n"
+		"               O cpf informado é inválido. Por favor, tente novamente...\n");
+		printf("\n"
+		"               CPF (apenas números): ");
+		scanf("%[0-9]", cpf);
+		getchar();
+		cpfValido = validaCPF(cpf);
+	}
 	printf("\n"
 	"///====================================================================================///\n"
 	"///            INFORMAÇÕES DO CLIENTE:  (caso esteja cadastrado)                       ///\n"
@@ -199,6 +267,7 @@ char telaAtualizarCliente(void) {
 void telaExcluirCliente(void) {
 	char cpf[12];
 	char confirma;
+	int cpfValido;
 	system("clear");
 	printf("\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -214,7 +283,17 @@ void telaExcluirCliente(void) {
 	printf("\n"
 	"               CPF (apenas números): ");
 	scanf("%[0-9]", cpf);
-	getchar();                                                                                  
+	getchar();
+	cpfValido = validaCPF(cpf);
+	while (cpfValido == 0) {
+		printf("\n"
+		"               O cpf informado é inválido. Por favor, tente novamente...\n");
+		printf("\n"
+		"               CPF (apenas números): ");
+		scanf("%[0-9]", cpf);
+		getchar();
+		cpfValido = validaCPF(cpf);
+	}                                                                                  
 	printf("\n"
 	"///                                                                                    ///\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
