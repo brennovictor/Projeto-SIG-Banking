@@ -90,7 +90,7 @@ void telaCadastrarCliente(void) {
 	getchar();
     printf("\n"
 	"               CPF (apenas números): ");
-	scanf("%[0-9]", cpf);
+	scanf("%[^\n]", cpf);
 	getchar();
 	cpfValido = validaCPF(cpf);
 	while (cpfValido == 0) {
@@ -98,7 +98,7 @@ void telaCadastrarCliente(void) {
 		"               O cpf informado é inválido. Por favor, tente novamente...\n");
 		printf("\n"
 		"               CPF (apenas números): ");
-		scanf("%[0-9]", cpf);
+		scanf("%[^\n]", cpf);
 		getchar();
 		cpfValido = validaCPF(cpf);
 	}

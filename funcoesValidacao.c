@@ -12,15 +12,16 @@ int validaCPF (char cpf[12]) {
 	int intcpf[12];
 	int soma1=0, soma2=0, digito1, digito2, resultado1, resultado2;
 	
+	if (strlen(cpf) != 11) {
+		return 0;
+	}
+	
 	for (int i = 0; cpf[i] != '\0'; i++) {
 		if (!isdigit(cpf[i])) {
 			return 0;
 		}
 	}
 	
-	if (strlen(cpf) != 11) {
-		return 0;
-	}
 	
 	if (
 	(strcmp(cpf,"00000000000") == 0) || (strcmp(cpf,"11111111111") == 0) || 

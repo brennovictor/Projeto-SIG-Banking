@@ -13,6 +13,7 @@
 #include "moduloContas.h"
 #include "moduloInformacoes.h"
 #include "moduloMovimentos.h"
+#include "moduloRelatorios.h"
 
 
 char menuPrincipal(void);
@@ -29,7 +30,9 @@ int main(void) {
 						break;
 			case '3':	moduloMovimentos();
 						break;
-			case '4':	moduloInformacoes();
+			case '4':	moduloRelatorios();
+						break;
+			case '5':	moduloInformacoes();
 						break;
 					}
 		} while(opçao != '0');
@@ -57,7 +60,8 @@ char menuPrincipal(void) {
 	"///            1 - Módulo cliente                                                      ///\n"
 	"///            2 - Módulo Contas                                                       ///\n"
 	"///            3 - Módulo movimento (Depósitos e Saques)                               ///\n"
-	"///            4 - Sobre o sistema                                                     ///\n"
+	"///            4 - Módulo Relatórios                                                   ///\n"
+	"///            5 - Sobre o sistema                                                     ///\n"
 	"///            0 - Encerrar o programa                                                 ///\n");
 	printf("\n"
 	"               Informe a sua opção: ");
