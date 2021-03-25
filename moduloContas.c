@@ -72,6 +72,7 @@ char menuContas(void) {
 void telaCadastrarConta(void) {
 	char numeroAgencia[6];
 	char numeroConta[10];
+	char operacao[4];
 	char senha[7];
 	
 	system("clear");
@@ -87,12 +88,15 @@ void telaCadastrarConta(void) {
 	"///            CADASTRAR CONTA:                                                        ///\n"
 	"///                                                                                    ///\n");
 	printf("\n"
-	"               Nº da agência (incluir digito verificador): ");
+	"               Nº da agência: ");
 	scanf("%[0-9]", numeroAgencia);
 	getchar();
 	printf("\n"
 	"               Nº da conta (incluir digito verificador): ");
 	scanf("%[0-9]", numeroConta);
+	printf("\n"
+	"               Nº de operação (tipo da conta): ");
+	scanf("%[0-9]", operacao);
 	getchar();
 	printf("\n");
 	printf("\n"
