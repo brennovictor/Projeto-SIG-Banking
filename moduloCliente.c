@@ -1,24 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "funcoesValidacao.h"
+#include "moduloCliente.h"
 
-void moduloCliente(void);
-char menuCliente(void);
-void telaCadastrarCliente(void);
-void telaPesquisarCliente(void);
-char telaAtualizarCliente(void);
-void telaExcluirCliente(void);
+
+typedef struct cliente Cliente;
 
 
 // função moduloCliente
 // a função chama a função menuCliente e todas as demais funções relacionadas ao módulo cliente,
 // de acordo com a opção escolhida pelo usuário
 void moduloCliente(void) {
-	char opçao;
+	char opcao;
 	do{                   
-		opçao = menuCliente();
-		switch (opçao){
-			case '1':	telaCadastrarCliente();
+		opcao = menuCliente();
+		switch (opcao){
+			case '1':	cadastrarCliente();
 						break;
 			case '2':	telaPesquisarCliente();
 						break;
@@ -27,8 +24,21 @@ void moduloCliente(void) {
 			case '4':	telaExcluirCliente();
 						break;
 					}
-		} while(opçao != '0');
+		} while(opcao != '0');
 }
+
+void cadastrarCliente(void) {
+  Cliente* client;
+	
+  // ler os dados do cliente com a função telaCadastrarCliente()
+  client = telaCadastrarCliente();
+
+  // liberar o espaço de memória da estrutura 
+  free(client);
+}
+
+
+
 
 
 // função menuCliente
@@ -67,11 +77,12 @@ char menuCliente(void) {
 
 // função telaCadastrarCliente
 // Essa função permite ao usuário cadastrar um cliente
-void telaCadastrarCliente(void) {
-	char nome[51];
-	char cpf[12];
+Cliente* telaCadastrarCliente(void) {
+	Cliente *client;
 	int cpfValido;
-	int dia, mes, ano, dataValida;
+	int dataValida;
+	client = (Cliente*) malloc(sizeof(Cliente));
+	
 	system("clear");
 	printf("\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -86,40 +97,39 @@ void telaCadastrarCliente(void) {
 	"///                                                                                    ///\n");
 	printf("\n"
 	"               Nome completo: ");
-	scanf("%[A-ZÁÉÍÓÚÂÊÔÇÀÃÕ a-záéíóúâêôçàãõ]", nome);
+	scanf("%[A-ZÁÉÍÓÚÂÊÔÇÀÃÕ a-záéíóúâêôçàãõ]", client->nome);
 	getchar();
     printf("\n"
 	"               CPF (apenas números): ");
-	scanf("%[^\n]", cpf);
+	scanf("%[^\n]", client->cpf);
 	getchar();
-	cpfValido = validaCPF(cpf);
+	cpfValido = validaCPF(client->cpf);
 	while (cpfValido == 0) {
 		printf("\n"
 		"               O cpf informado é inválido. Por favor, tente novamente...\n");
 		printf("\n"
 		"               CPF (apenas números): ");
-		scanf("%[^\n]", cpf);
+		scanf("%[^\n]", client->cpf);
 		getchar();
-		cpfValido = validaCPF(cpf);
+		cpfValido = validaCPF(client->cpf);
 	}
 	printf("\n"
 	"               cpf cadastrado com sucesso!\n");
-
 	printf("\n"
 	"               Data de nascimento:\n");
 	printf("\n"
 	"               Informe o dia: ");
-	scanf("%d", &dia);
+	scanf("%[^\n]", client->dia);
 	getchar();
 	printf("\n"
 	"               Informe o mês: ");
-	scanf("%d", &mes);
+	scanf("%[^\n]", client->mes);
 	getchar();
 	printf("\n"
 	"               Informe o ano: ");
-	scanf("%d", &ano);
+	scanf("%[^\n]", client->ano);
 	getchar();
-	dataValida = validaData(dia, mes, ano);
+	dataValida = validaData(client->dia, client->mes, client->ano);
 	while (dataValida == 0) {
 		printf("\n"
 		"               A data informada é inválida. Por favor, tente novamente...\n");
@@ -127,17 +137,17 @@ void telaCadastrarCliente(void) {
 		"               Data de nascimento:\n");
 		printf("\n"
 		"               Informe o dia: ");
-		scanf("%d", &dia);
+		scanf("%[^\n]", client->dia);
 		getchar();
 		printf("\n"
 		"               Informe o mês: ");
-		scanf("%d", &mes);
+		scanf("%[^\n]", client->mes);
 		getchar();
 		printf("\n"
 		"               Informe o ano: ");
-		scanf("%d", &ano);
+		scanf("%[^\n]", client->ano);
 		getchar();
-		dataValida = validaData(dia, mes, ano);		
+		dataValida = validaData(client->dia, client->mes, client->ano);		
 	}
 	printf("\n"
 	"               Data cadastrada com sucesso!\n");
@@ -145,8 +155,11 @@ void telaCadastrarCliente(void) {
 	"///                                                                                    ///\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
 	"\n");
-    printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
+	printf("\n"
+	"               Cliente cadastrado com sucesso!\n\n");
+	printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
 	getchar();
+	return client;
 }
 
 
@@ -202,10 +215,10 @@ void telaPesquisarCliente(void) {
 
 // função telaAtualizarCliente
 // Essa função permite ao usuário atualizar um cliente, se este estiver cadastrado
-char telaAtualizarCliente(void) {
-	char op;
+void telaAtualizarCliente(void) {
 	char cpf[12];
 	int cpfValido;
+	char op;
 	system("clear");
 	printf("\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -255,10 +268,9 @@ char telaAtualizarCliente(void) {
 	"///                                                                                    ///\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
 	"\n");
-	printf("Em densevolvimento....\n\n");
+	printf(";Em densevolvimento....\n\n");
 	printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
 	getchar();
-	return op;
 }
 
 
@@ -266,7 +278,6 @@ char telaAtualizarCliente(void) {
 // Essa função permite ao usuário excluir um cliente, se este estiver cadastrado
 void telaExcluirCliente(void) {
 	char cpf[12];
-	char confirma;
 	int cpfValido;
 	system("clear");
 	printf("\n"

@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <time.h>
+#include <math.h>
 
 // função validaCPF
 // Retorna 1 se o cpf for válido, ou retorna 0 se o cpf for inválido
@@ -21,7 +22,6 @@ int validaCPF (char cpf[12]) {
 			return 0;
 		}
 	}
-	
 	
 	if (
 	(strcmp(cpf,"00000000000") == 0) || (strcmp(cpf,"11111111111") == 0) || 
@@ -85,54 +85,107 @@ int validaCPF (char cpf[12]) {
 // referência:
 // https://pt.stackoverflow.com/questions/159141/obter-a-data-atual-diretamente-pela-m%C3%A1quina
 
-int validaData(int dia, int mes, int ano) {
-	int bissexto (int);
+int validaData(char dia[3], char mes[3], char ano[5]) {
+	int bissexto(int);
 	int maiorDia, diaAtual, mesAtual, anoAtual;
+	int intDia = 0, intMes = 0, intAno = 0, tamDia, tamMes, tamAno;
 	time_t mytime;
     mytime = time(NULL);
     struct tm tm = *localtime(&mytime);
-	
+
 	diaAtual = tm.tm_mday;
 	mesAtual = tm.tm_mon + 1;
 	anoAtual = tm.tm_year + 1900;
 
-	if (ano < 0 || mes < 1 || mes > 12 || dia < 1) {
-		return 0;
-	}
-	if (ano > anoAtual) {
-		return 0;
-	}
-	if (ano == anoAtual) {
-		if (mes > mesAtual) {
+	for (int i = 0; dia[i] != '\0'; i++) {
+		if (!isdigit(dia[i])) {
 			return 0;
 		}
-		else if (mes == mesAtual) {
-			if (dia > diaAtual) {
+	}
+
+	for (int i = 0; mes[i] != '\0'; i++) {
+		if (!isdigit(mes[i])) {
+			return 0;
+		}
+	}
+
+	for (int i = 0; ano[i] != '\0'; i++) {
+		if (!isdigit(ano[i])) {
+			return 0;
+		}	
+	}
+
+	if (strlen(dia) < 1 || strlen(mes) < 1 || strlen(ano) < 1) {
+		return 0;
+	}
+
+	tamDia = strlen(dia) - 1;
+	tamMes = strlen(mes) - 1;
+	tamAno = strlen(ano) - 1;
+
+	if (tamDia == 0) {
+		intDia = dia[0] - 48;
+	}
+	else {
+		for (int i = 0, i2 = tamDia; i < strlen(dia); i++, i2--) {
+			intDia += (dia[i] - 48) * pow(10, i2);
+		}
+	}
+
+	if (tamMes == 0) {
+		intMes = mes[0] - 48;
+	}
+	else {
+		for (int i = 0, i2 = tamMes; i < strlen(mes); i++, i2--) {
+			intMes += (mes[i] - 48) * pow(10, i2);
+		}
+	}
+	
+	if (tamAno == 0) {
+		intAno = ano[0] - 48;
+	}
+	else {
+		for (int i = 0, i2 = tamAno; i < strlen(ano); i++, i2--) {
+			intAno += (ano[i] - 48) * pow(10, i2);
+		}
+	}
+
+
+	if (intAno < 0 || intMes < 1 || intMes > 12 || intDia < 1) {
+		return 0;
+	}
+	if (intAno > anoAtual) {
+		return 0;
+	}
+	if (intAno == anoAtual) {
+		if (intMes > mesAtual) {
+			return 0;
+		}
+		else if (intMes == mesAtual) {
+			if (intDia > diaAtual) {
 				return 0;
 			}
 		}
 	}
-	if (mes == 2) {
-		if (bissexto(ano)) {
+	if (intMes == 2) {
+		if (bissexto(intAno)) {
 		maiorDia = 29;
 		} 
 		else {
 		maiorDia = 28;
 		}
 	} 
-	else if (mes == 4 || mes == 6 || mes == 9 || mes == 11) {
+	else if (intMes == 4 || intMes == 6 || intMes == 9 || intMes == 11) {
 		maiorDia = 30;
 	} 
 	else {
 		maiorDia = 31;
 	}
-	if (dia > maiorDia) {
+	if (intDia > maiorDia) {
 		return 0;
 	}
 	return 1;
 }
-
-
 
 // função bissexto
 // Recebe um ano e verifica se o ano é bissexto ou não

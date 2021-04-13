@@ -1,30 +1,62 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "moduloMovimentos.h"
+#include <time.h>
 
-void moduloMovimentos(void);
-char menuMovimentos(void);
-void telaRealizarSaque(void);
-void telaRealizarDeposito(void);
-void telaConstultarSaldo(void);
 
+typedef struct movimentacao Movimentacao;
 
 
 // função moduloMovimentos
 // Essa função chama a função menuMovimentos e todas as demais funções relacionadas ao módulo
 // movimentos, de acordo com a opção escolhida pelo usuário
 void moduloMovimentos(void) {
-	char opçao;
+	char opcao;
 	do{                   
-		opçao = menuMovimentos();
-		switch (opçao){
-			case '1':	telaRealizarSaque();
+		opcao = menuMovimentos();
+		switch (opcao){
+			case '1':	realizarSaque();
 						break;
-			case '2':	telaRealizarDeposito();
+			case '2':	realizarDeposito();
 						break;
-			case '3':	telaConstultarSaldo();
+			case '3':	consultarSaldo();
 						break;
 					}
-		} while(opçao != '0');
+		} while(opcao != '0');
+}
+
+void realizarSaque(void) {
+  Movimentacao* movim;
+	
+  // ler os dados da moviemtação com a função telaRealizarSaque()
+  movim = telaRealizarSaque();
+
+  // liberar o espaço de memória da estrutura 
+  free(movim);
+}
+
+
+
+void realizarDeposito(void) {
+  Movimentacao* movim;
+	
+  // ler os dados do cliente com a função telaCadastrarCliente()
+  movim = telaRealizarDeposito();
+
+  // liberar o espaço de memória da estrutura 
+  free(movim);
+}
+
+
+
+void consultarSaldo(void) {
+  Movimentacao* movim;
+	
+  // ler os dados do cliente com a função telaCadastrarCliente()
+  movim = telaConsultarSaldo();
+
+  // liberar o espaço de memória da estrutura 
+  free(movim);
 }
 
 
@@ -34,6 +66,7 @@ void moduloMovimentos(void) {
 // à função chamadora
 char menuMovimentos(void) {
 	char op;
+	
 	system("clear");
 	printf("\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -66,12 +99,19 @@ char menuMovimentos(void) {
 
 // função telaRealizarSaque
 // Essa função permite ao usuário realizar um saque, se a conta informada estiver cadastrada
-void telaRealizarSaque(void) {
-	char numeroAgencia[6];
-	char numeroConta[10];
-	char senha[7];
+Movimentacao* telaRealizarSaque(void) {
+	Movimentacao *movim;
+	movim = (Movimentacao*) malloc(sizeof(Movimentacao));
+	movim->tipo = '1';
+	
+	time_t mytime;
+    mytime = time(NULL);
+    struct tm tm = *localtime(&mytime);
+	movim->dia = tm.tm_mday;
+	movim->mes = tm.tm_mon + 1;
+	movim->ano = tm.tm_year + 1900;
 
-  system("clear");
+	system("clear");
 	printf("\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -84,23 +124,26 @@ void telaRealizarSaque(void) {
 	"///            REALIZAR SAQUE:                                                         ///\n"
 	"///                                                                                    ///\n");
 	printf("\n"
-	"               Nº da agência (incluir digito verificador): ");
-	scanf("%[0-9]", numeroAgencia);
-	getchar();
-	printf("\n"
 	"               Nº da conta (incluir digito verificador): ");
-	scanf("%[0-9]", numeroConta);
+	scanf("%[0-9]", movim->numeroConta);
 	getchar();
 	printf("\n"
 	"               Senha (6 digitos): ");
-	scanf("%[0-9]", senha);
+	scanf("%[0-9]", movim->senha);
+	getchar();
+	printf("\n"
+	"               Valor a ser sacado: ");
+	scanf("%f", &movim->valor);
 	getchar();
 	printf("\n"
 	"///                                                                                    ///\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
 	"\n");
+	printf("\n"
+	"              Saque realizado com sucesso!\n\n");
 	printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
 	getchar();
+	return movim;
 }
 	// if conta existe:
 	// "///====================================================================================///\n"
@@ -115,10 +158,17 @@ void telaRealizarSaque(void) {
 
 // função telaRealizarDeposito
 // Essa função permite ao usuário realizar um depósito, se a conta informada estiver cadastrada
-void telaRealizarDeposito(void) {
-	char numeroAgencia[6];
-	char numeroConta[10];
-	char senha[7];
+Movimentacao* telaRealizarDeposito(void) {
+	Movimentacao *movim;
+	movim = (Movimentacao*) malloc(sizeof(Movimentacao));
+	movim->tipo = '2';
+
+	time_t mytime;
+    mytime = time(NULL);
+    struct tm tm = *localtime(&mytime);
+	movim->dia = tm.tm_mday;
+	movim->mes = tm.tm_mon + 1;
+	movim->ano = tm.tm_year + 1900;
 
 	system("clear");
 	printf("\n"
@@ -133,19 +183,22 @@ void telaRealizarDeposito(void) {
 	"///            REALIZAR DEPÓSITO:                                                      ///\n"
 	"///                                                                                    ///\n");
 	printf("\n"
-	"               Nº da agência (incluir digito verificador): ");
-	scanf("%[0-9]", numeroAgencia);
+	"               Nº da conta (incluir digito verificador): ");
+	scanf("%[0-9]", movim->numeroConta);
 	getchar();
 	printf("\n"
-	"               Nº da conta (incluir digito verificador): ");
-	scanf("%[0-9]", numeroConta);
+	"               Valor a ser depositado: ");
+	scanf("%f", &movim->valor);
 	getchar();
 	printf("\n"
 	"///                                                                                    ///\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
 	"\n");
+	printf("\n"
+	"              Depósitvo realizado com sucesso!\n\n");
 	printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
 	getchar();
+	return movim;
 }
 
   // if conta existe:
@@ -160,10 +213,17 @@ void telaRealizarDeposito(void) {
 
 // função telaConstultarSaldo
 // Essa função permite ao usuário consultar o saldo, se a conta informada estiver cadastrada
-void telaConstultarSaldo(void) {
-	char numeroAgencia[6];
-	char numeroConta[10];
-	char senha[7];
+Movimentacao* telaConsultarSaldo(void) {
+	Movimentacao *movim;
+	movim = (Movimentacao*) malloc(sizeof(Movimentacao));
+	movim->tipo = '3'; 
+	
+	time_t mytime;
+    mytime = time(NULL);
+    struct tm tm = *localtime(&mytime);
+	movim->dia = tm.tm_mday;
+	movim->mes = tm.tm_mon + 1;
+	movim->ano = tm.tm_year + 1900;
 	
 	system("clear");
 	printf("\n"
@@ -178,23 +238,23 @@ void telaConstultarSaldo(void) {
 	"///            CONSULTAR SALDO:                                                        ///\n"
 	"///                                                                                    ///\n");
 	printf("\n"
-	"               Nº da agência (incluir digito verificador): ");
-	scanf("%[0-9]", numeroAgencia);
-	getchar();
-	printf("\n"
 	"               Nº da conta (incluir digito verificador): ");
-	scanf("%[0-9]", numeroConta);
+	scanf("%[0-9]", movim->numeroConta);
 	getchar();
 	printf("\n"
 	"               Senha (6 digitos): ");
-	scanf("%[0-9]", senha);
+	scanf("%[0-9]", movim->senha);
 	getchar();
+	printf("\n"
+	"               SALDO DA CONTA: (em desenvolvimento)");
+	printf("\n\n");
 	printf("\n"
 	"///                                                                                    ///\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
 	"\n");
 	printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
 	getchar();
+	return movim;
 }
 	// if conta existe:
 	// "///====================================================================================///\n"
@@ -202,3 +262,6 @@ void telaConstultarSaldo(void) {
 	// "///            Saldo atual:                                                            ///\n"
 	// "///                                                                                    ///\n"
 	// "//////////////////////////////////////////////////////////////////////////////////////////\n"
+
+
+

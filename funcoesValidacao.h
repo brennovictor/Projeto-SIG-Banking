@@ -11,7 +11,7 @@ int validaCPF (char []);
 // https://repl.it/@flaviusgorgonio/ValidaDataComFuncoesc
 // referência:
 // https://pt.stackoverflow.com/questions/159141/obter-a-data-atual-diretamente-pela-m%C3%A1quina
-int validaData (int, int, int);
+int validaData (char[], char[], char[]);
 
 
 // função bissexto

@@ -13,10 +13,10 @@ void relatorioTransferências (void);
 
 
 void moduloRelatorios(void) {
-	char opçao;
+	char opcao;
 	do{                   
-		opçao = menuRelatorios();
-		switch (opçao){
+		opcao = menuRelatorios();
+		switch (opcao){
 			case '1':	relatorioClientes();
 						break;
 			case '2':	relatorioContas();
@@ -30,7 +30,7 @@ void moduloRelatorios(void) {
 			case '6':	relatorioTransferências();
 						break;
 					}
-		} while(opçao != '0');
+		} while(opcao != '0');
 }
 
 char menuRelatorios(void) {

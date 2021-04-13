@@ -1,3 +1,14 @@
+typedef struct conta Conta;
+
+struct conta {
+	char numeroAgencia[6];
+	char numeroConta[10];
+	char operacao[4];
+	char senha[7];
+	char cpf[12];
+};
+
+
 // função moduloContas
 // Essa função chama a função menuContas e todas as demais funções relacionadas ao módulo contas,
 // de acordo com a opção escolhida pelo usuário
@@ -12,7 +23,7 @@ char menuContas(void);
 
 // função telaCadastrarConta
 // Essa função permite ao usuário cadastrar uma conta
-void telaCadastrarConta(void);
+Conta* telaCadastrarConta(void);
 
 
 // função telaPesquisarConta
@@ -28,3 +39,6 @@ char telaAtualizarConta(void);
 // função telaExcluirConta
 // Essa função permite ao usuário excluir uma conta, se esta estiver cadastrada
 void telaExcluirConta(void);
+
+
+void cadastrarConta(void);

@@ -1,24 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "moduloContas.h"
+#include "funcoesValidacao.h"
 
-void moduloContas(void);
-char menuContas(void);
-void telaCadastrarConta(void);
-void telaPesquisarConta(void);
-char telaAtualizarConta(void);
-void telaExcluirConta(void);
 
+typedef struct conta Conta;
 
 
 // função moduloContas
 // Essa função chama a função menuContas e todas as demais funções relacionadas ao módulo contas,
 // de acordo com a opção escolhida pelo usuário
 void moduloContas(void) {
-	char opçao;
+	char opcao;
 	do{                   
-		opçao = menuContas();
-		switch (opçao){
-			case '1':	telaCadastrarConta();
+		opcao = menuContas();
+		switch (opcao){
+			case '1':	cadastrarConta();
 						break;
 			case '2':	telaPesquisarConta();
 						break;
@@ -27,8 +24,19 @@ void moduloContas(void) {
 			case '4':	telaExcluirConta();
 						break;
 					}
-		} while(opçao != '0');
+		} while(opcao != '0');
 }
+
+void cadastrarConta(void) {
+  Conta* acc;
+	
+  // ler os dados do cliente com a função telaCadastrarCliente()
+  acc = telaCadastrarConta();
+
+  // liberar o espaço de memória da estrutura 
+  free(acc);
+}
+
 
 
 
@@ -69,12 +77,11 @@ char menuContas(void) {
 
 // função telaCadastrarConta
 // Essa função permite ao usuário cadastrar uma conta
-void telaCadastrarConta(void) {
-	char numeroAgencia[6];
-	char numeroConta[10];
-	char operacao[4];
-	char senha[7];
-	
+Conta* telaCadastrarConta(void) {
+	Conta *acc;
+	acc = (Conta*) malloc(sizeof(Conta));
+	int cpfValido;
+
 	system("clear");
 	printf("\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -88,27 +95,47 @@ void telaCadastrarConta(void) {
 	"///            CADASTRAR CONTA:                                                        ///\n"
 	"///                                                                                    ///\n");
 	printf("\n"
-	"               Nº da agência: ");
-	scanf("%[0-9]", numeroAgencia);
+	"               Nº da agência (incluir digito verificador): ");
+	scanf("%[0-9]", acc->numeroAgencia);
 	getchar();
 	printf("\n"
 	"               Nº da conta (incluir digito verificador): ");
-	scanf("%[0-9]", numeroConta);
+	scanf("%[0-9]", acc->numeroConta);
+	getchar();
 	printf("\n"
 	"               Nº de operação (tipo da conta): ");
-	scanf("%[0-9]", operacao);
+	scanf("%[0-9]", acc->operacao);
 	getchar();
 	printf("\n");
 	printf("\n"
 	"               Senha (6 digitos): ");
-	scanf("%[0-9]", senha);
+	scanf("%[0-9]", acc->senha);
 	getchar();
+	printf("\n"
+	"               CPF (apenas números): ");
+	scanf("%[^\n]", acc->cpf);
+	getchar();
+	cpfValido = validaCPF(acc->cpf);
+	while (cpfValido == 0) {
+		printf("\n"
+		"               O cpf informado é inválido. Por favor, tente novamente...\n");
+		printf("\n"
+		"               CPF (apenas números): ");
+		scanf("%[^\n]", acc->cpf);
+		getchar();
+		cpfValido = validaCPF(acc->cpf);
+	}
+	printf("\n"
+	"               cpf cadastrado com sucesso!\n");
 	printf("\n"
 	"///                                                                                    ///\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
 	"\n");
+	printf("\n"
+	"               Conta cadastrada com sucesso!\n\n");
 	printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
 	getchar();
+	return acc;
 }
 
 
