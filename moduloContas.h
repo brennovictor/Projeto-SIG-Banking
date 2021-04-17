@@ -1,11 +1,12 @@
 typedef struct conta Conta;
 
 struct conta {
-	char numeroAgencia[6];
-	char numeroConta[10];
+	char numAgencia[6];
+	char numConta[10];
 	char operacao[4];
 	char senha[7];
 	char cpf[12];
+	int status;
 };
 
 
@@ -28,17 +29,30 @@ Conta* telaCadastrarConta(void);
 
 // função telaPesquisarConta
 // Essa função permite ao usuário pesquisar uma conta que esteja cadastrada
-void telaPesquisarConta(void);
+char* telaPesquisarConta(void);
 
 
 // função telaAtualizarConta
 // Essa função permite ao usuário atualizar uma conta, se esta estiver cadastrada
-char telaAtualizarConta(void);
+char* telaAtualizarConta(void);
 
 
 // função telaExcluirConta
 // Essa função permite ao usuário excluir uma conta, se esta estiver cadastrada
-void telaExcluirConta(void);
+char* telaExcluirConta(void);
 
+void cadastrarConta (void); 
 
-void cadastrarConta(void);
+void pesquisarConta (void);
+
+void atualizarConta(void);
+
+void excluirConta(void);
+
+void gravarConta(Conta*);
+
+Conta* buscarConta(char*);
+
+void exibirConta(Conta*);
+
+void regravarConta(Conta*);

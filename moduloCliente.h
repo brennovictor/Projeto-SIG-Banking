@@ -1,9 +1,10 @@
 typedef struct cliente Cliente;
 
 struct cliente {
-	char nome[81];
+	char nome[51];
 	char cpf[12];
 	char dia[3], mes[3], ano[5]; // data de nascimento
+	int status;
 };
 
 
@@ -26,21 +27,33 @@ Cliente* telaCadastrarCliente(void);
 
 // função telaPesquisarCliente
 // Essa função permite ao usuário pesquisar um cliente que esteja cadastrado
-void telaPesquisarCliente(void);
+char* telaPesquisarCliente(void);
 
 
 // função telaAtualizarCliente
 // Essa função permite ao usuário atualizar um cliente, se este estiver cadastrado
-void telaAtualizarCliente(void);
+char* telaAtualizarCliente(void);
 
 
 // função telaExcluirCliente
 // Essa função permite ao usuário excluir um cliente, se este estiver cadastrado
-void telaExcluirCliente(void);
-
-
+char* telaExcluirCliente(void);
 
 void cadastrarCliente (void); 
-// void pesquisarCliente (void);
-// void atualizarCliente(void);
-// void excluirCliente(void);
+
+void pesquisarCliente (void);
+
+void atualizarCliente(void);
+
+void excluirCliente(void);
+
+void gravarCliente(Cliente*);
+
+Cliente* buscarCliente(char*);
+
+void exibirCliente(Cliente*);
+
+void regravarCliente(Cliente*);
+
+
+

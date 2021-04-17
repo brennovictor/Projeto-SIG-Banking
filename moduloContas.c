@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "moduloContas.h"
 #include "funcoesValidacao.h"
 
@@ -17,27 +18,85 @@ void moduloContas(void) {
 		switch (opcao){
 			case '1':	cadastrarConta();
 						break;
-			case '2':	telaPesquisarConta();
+			case '2':	pesquisarConta();
 						break;
-			case '3':	telaAtualizarConta();
+			case '3': 	atualizarConta();
 						break;
-			case '4':	telaExcluirConta();
+			case '4':	excluirConta();
 						break;
 					}
 		} while(opcao != '0');
 }
 
-void cadastrarConta(void) {
-  Conta* acc;
-	
-  // ler os dados do cliente com a função telaCadastrarCliente()
-  acc = telaCadastrarConta();
 
-  // liberar o espaço de memória da estrutura 
-  free(acc);
+void cadastrarConta(void) {
+	Conta* acc;
+		
+	acc = telaCadastrarConta();
+  	gravarConta(acc);
+	free(acc);
 }
 
 
+void pesquisarConta (void) {
+	Conta* acc;
+	char* numConta;
+
+	numConta = telaPesquisarConta();
+	acc = buscarConta(numConta);
+	if (acc == NULL) {
+		printf("\n\nConta não encontrada!\n\n");
+		printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
+		getchar();
+	} else {
+		exibirConta(acc);
+		free(acc);
+	} 
+	free(numConta);
+}
+
+
+void atualizarConta(void) {
+	Conta* acc;
+	char* numConta;
+
+	numConta = telaAtualizarConta();
+	acc = buscarConta(numConta);
+	if (acc == NULL) {
+		printf("\n\nConta não encontrada!\n\n");
+		printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
+		getchar();
+	} else {
+		acc = telaCadastrarConta();
+		strcpy(acc->numConta, numConta);
+		regravarConta(acc);
+		free(acc);
+	}
+	free(numConta);
+}
+
+
+void excluirConta(void) {
+	Conta* acc;
+	char* numConta;
+
+	numConta = telaExcluirConta();
+	acc = (Conta*) malloc(sizeof(Conta));
+	acc = buscarConta(numConta);
+	if (acc == NULL) {
+    	printf("\n\nConta não encontrada!\n\n");
+		printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
+		getchar();
+  	} else {
+			acc->status = False;
+			regravarConta(acc);
+			free(acc);
+			printf("\nConta excluída com sucesso!\n");
+			printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
+			getchar();
+	}
+	free(numConta);
+}
 
 
 // função menuContas
@@ -78,9 +137,9 @@ char menuContas(void) {
 // função telaCadastrarConta
 // Essa função permite ao usuário cadastrar uma conta
 Conta* telaCadastrarConta(void) {
-	Conta *acc;
+	Conta* acc;
+	// int cpfValido;
 	acc = (Conta*) malloc(sizeof(Conta));
-	int cpfValido;
 
 	system("clear");
 	printf("\n"
@@ -96,11 +155,11 @@ Conta* telaCadastrarConta(void) {
 	"///                                                                                    ///\n");
 	printf("\n"
 	"               Nº da agência (incluir digito verificador): ");
-	scanf("%[0-9]", acc->numeroAgencia);
+	scanf("%[0-9]", acc->numAgencia);
 	getchar();
 	printf("\n"
 	"               Nº da conta (incluir digito verificador): ");
-	scanf("%[0-9]", acc->numeroConta);
+	scanf("%[0-9]", acc->numConta);
 	getchar();
 	printf("\n"
 	"               Nº de operação (tipo da conta): ");
@@ -115,18 +174,19 @@ Conta* telaCadastrarConta(void) {
 	"               CPF (apenas números): ");
 	scanf("%[^\n]", acc->cpf);
 	getchar();
-	cpfValido = validaCPF(acc->cpf);
-	while (cpfValido == 0) {
-		printf("\n"
-		"               O cpf informado é inválido. Por favor, tente novamente...\n");
-		printf("\n"
-		"               CPF (apenas números): ");
-		scanf("%[^\n]", acc->cpf);
-		getchar();
-		cpfValido = validaCPF(acc->cpf);
-	}
+	// cpfValido = validaCPF(acc->cpf);
+	// while (cpfValido == 0) {
+	// 	printf("\n"
+	// 	"               O cpf informado é inválido. Por favor, tente novamente...\n");
+	// 	printf("\n"
+	// 	"               CPF (apenas números): ");
+	// 	scanf("%[^\n]", acc->cpf);
+	// 	getchar();
+	// 	cpfValido = validaCPF(acc->cpf);
+	// }
 	printf("\n"
 	"               cpf cadastrado com sucesso!\n");
+	acc->status = True;
 	printf("\n"
 	"///                                                                                    ///\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -142,8 +202,9 @@ Conta* telaCadastrarConta(void) {
 
 // função telaPesquisarConta
 // Essa função permite ao usuário pesquisar uma conta que esteja cadastrada
-void telaPesquisarConta(void) {
-	char numeroConta[10];
+char* telaPesquisarConta(void) {
+	char* numConta;
+	numConta = (char*) malloc(10*sizeof(char));
 	
 	system("clear");
 	printf("\n"
@@ -159,15 +220,13 @@ void telaPesquisarConta(void) {
 	"///                                                                                    ///\n");
 	printf("\n"
 	"               Nº da conta (incluir digito verificador): ");
-	scanf("%[0-9]", numeroConta);
+	scanf("%[0-9]", numConta);
 	getchar();
 	printf("\n"
 	"///                                                                                    ///\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
 	"\n");
-	printf("Em desenvolvimento...\n\n");
-	printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
-	getchar();
+	return numConta;
 }
 	// "///====================================================================================///\n"
 	// "///            INFORMAÇÕES DA CONTA:  (caso esteja cadastrada)                         ///\n"
@@ -182,9 +241,10 @@ void telaPesquisarConta(void) {
 
 // função telaAtualizarConta
 // Essa função permite ao usuário atualizar uma conta, se esta estiver cadastrada
-char telaAtualizarConta(void) {
-	char op;
-	char numeroConta[10];
+char* telaAtualizarConta(void) {
+	char* numConta;
+	numConta = (char*) malloc(10*sizeof(char));
+
 	system("clear");
 	printf("\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -197,44 +257,43 @@ char telaAtualizarConta(void) {
 	"///                                                                                    ///\n");
 	printf("\n"
 	"               Nº da conta (incluir digito verificador): ");
-	scanf("%[0-9]", numeroConta);
+	scanf("%[0-9]", numConta);
 	getchar();
-	printf("\n"
-	"///====================================================================================///\n"
-	"///            INFORMAÇÕES DA CONTA:  (caso esteja cadastrada)                         ///\n"
-	"///                                                                                    ///\n"
-	"///            Nº da agência:                                                          ///\n"
-	"///            Nº da conta:                                                            ///\n"
-	"///            Senha:                                                                  ///\n"
-	"///                                                                                    ///\n"
-	"//////////////////////////////////////////////////////////////////////////////////////////\n"
-	"///                                                                                    ///\n"
-	"///            ATUALIZAR CONTA:                                                        ///\n"
-	"///                                                                                    ///\n"
-	"///            1 - Atualizar nº da agência                                             ///\n"
-	"///            2 - Atualizar nº da conta                                               ///\n"
-	"///            3 - Atualizar senha                                                     ///\n"
-	"///            0 - Encerrar o programa                                                 ///\n");
-	printf("\n"
-	"               Informe a sua opção: ");
-	scanf("%c", &op);
-	getchar();
+	// printf("\n"
+	// "///====================================================================================///\n"
+	// "///            INFORMAÇÕES DA CONTA:  (caso esteja cadastrada)                         ///\n"
+	// "///                                                                                    ///\n"
+	// "///            Nº da agência:                                                          ///\n"
+	// "///            Nº da conta:                                                            ///\n"
+	// "///            Senha:                                                                  ///\n"
+	// "///                                                                                    ///\n"
+	// "//////////////////////////////////////////////////////////////////////////////////////////\n"
+	// "///                                                                                    ///\n"
+	// "///            ATUALIZAR CONTA:                                                        ///\n"
+	// "///                                                                                    ///\n"
+	// "///            1 - Atualizar nº da agência                                             ///\n"
+	// "///            2 - Atualizar nº da conta                                               ///\n"
+	// "///            3 - Atualizar senha                                                     ///\n"
+	// "///            0 - Encerrar o programa                                                 ///\n");
+	// printf("\n"
+	// "               Informe a sua opção: ");
+	// scanf("%c", &op);
+	// getchar();
 	printf("\n"
 	"///                                                                                    ///\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
 	"\n");
-	printf("Em desenvolvimento...\n\n");
-	printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
-	getchar();
-	return op;
+	return numConta;
 }
 
 
 
 // função telaExcluirConta
 // Essa função permite ao usuário excluir uma conta, se esta estiver cadastrada
-void telaExcluirConta(void) {
-	char numeroConta[10];
+char* telaExcluirConta(void) {
+	char* numConta;
+	numConta = (char*) malloc(10*sizeof(char));
+
 	system("clear");
 	printf("\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -249,15 +308,13 @@ void telaExcluirConta(void) {
 	"///                                                                                    ///\n");
 	printf("\n"
 	"               Nº da conta (incluir digito verificador): ");
-	scanf("%[0-9]", numeroConta);
+	scanf("%[0-9]", numConta);
 	getchar();
 	printf("\n"
 	"///                                                                                    ///\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
 	"\n");
-	printf("Em desenvolvimento...\n\n");
-	printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
-	getchar();
+	return numConta;
 }
 	// "///====================================================================================///\n"
 	// "///            INFORMAÇÕES DA CONTA:  (caso esteja cadastrada)                         ///\n"
@@ -273,3 +330,93 @@ void telaExcluirConta(void) {
 	// "///                                                                                    ///\n"
 	// "//////////////////////////////////////////////////////////////////////////////////////////\n"
 	///ELSE CONTINUE
+
+
+
+void gravarConta(Conta* acc) {
+  FILE* fp;
+
+  fp = fopen("contas.dat", "ab");
+  if (fp == NULL) {
+    printf("Ops! Ocorreu um erro na abertura do arquivo!\n");
+    printf("Infelzmente, não é possível continuar este programa...\n");
+	printf("Programa encerrado!\n");
+    exit(1);
+  }
+  fwrite(acc, sizeof(Conta), 1, fp);
+  fclose(fp);
+}
+
+
+
+Conta* buscarConta(char* numConta) {
+	FILE* fp;
+	Conta* acc;
+
+	acc = (Conta*) malloc(sizeof(Conta));
+	fp = fopen("contas.dat", "rb");
+	if (fp == NULL) {
+		printf("Ops! Ocorreu um erro na abertura do arquivo!\n");
+		printf("Não é possível continuar este programa...\n");
+		printf("Programa encerrado!\n");
+		exit(1);
+	}
+	// while(!feof(fp)) {
+	while(fread(acc, sizeof(Conta), 1, fp)) {
+		if (strcmp(acc->numConta, numConta) == 0 && (acc->status == True)) {
+			fclose(fp);
+			return acc;
+		}
+	}
+	fclose(fp);
+	return NULL;
+}
+
+
+
+void exibirConta(Conta* acc) {
+
+  if (acc == NULL) {
+    printf("\n= = = Conta Inexistente = = =\n");
+  } else {
+    printf("\n= = = Conta Cadastrada = = =\n");
+    printf("Nº da conta: %s\n", acc->numConta);
+    printf("Nº da agência: %s\n", acc->numAgencia);
+    printf("Operação: %s\n", acc->operacao);
+    printf("Senha: %s\n", acc->senha);
+    printf("CPF: %s\n", acc->cpf);
+	printf("Status: %d\n", acc->status);
+  }
+  printf("\n\nTecle ENTER para continuar!\n\n");
+  getchar();
+}
+
+
+
+void regravarConta(Conta* acc) {
+	int achou;
+	FILE* fp;
+	Conta* accLida;
+
+	accLida = (Conta*) malloc(sizeof(Conta));
+	fp = fopen("contas.dat", "r+b");
+	if (fp == NULL) {
+		printf("Ops! Ocorreu um erro na abertura do arquivo!\n");
+		printf("Não é possível continuar este programa...\n");
+		printf("Programa encerrado!\n");
+		exit(1);
+	}
+	// while(!feof(fp)) {
+	achou = False;
+	while(fread(accLida, sizeof(Conta), 1, fp) && !achou) {
+		// fread(clientLido, sizeof(Cliente), 1, fp);
+		if (strcmp(accLida->numConta, acc->numConta) == 0) {
+			achou = True;
+			fseek(fp, -1*sizeof(Conta), SEEK_CUR);
+		fwrite(acc, sizeof(Conta), 1, fp);
+			// break;
+		}
+	}
+	fclose(fp);
+	free(accLida);
+}

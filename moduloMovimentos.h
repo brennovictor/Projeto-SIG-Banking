@@ -1,11 +1,10 @@
 typedef struct movimentacao Movimentacao;
 
 struct movimentacao {
-	char numeroConta[10];
-	char senha[7];
-	int dia, mes, ano; // data
+	char numConta[10];
+	char dia[3], mes[3], ano[5]; // data
 	char tipo;
-	float valor;
+	char valor[15];
 };
 
 // função moduloMovimentos
@@ -35,5 +34,9 @@ Movimentacao* telaRealizarDeposito(void);
 Movimentacao* telaConsultarSaldo(void);
 
 void realizarSaque(void);
+
 void realizarDeposito(void);
+
 void consultarSaldo(void);
+
+void gravarMovimentacao(Movimentacao*);

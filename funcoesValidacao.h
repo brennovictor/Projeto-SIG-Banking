@@ -1,3 +1,6 @@
+#define True 1
+#define False 0
+
 // função validaCPF
 // Retorna 1, se o cpf for válido, ou retorna 0 se o cpf for inválido
 // referência: http://pog-carlos.blogspot.com/2011/11/validacao-de-cpf-em-c-usando-vetor.html
