@@ -59,7 +59,7 @@ char menuPrincipal(void) {
 	"///                                                                                    ///\n"
 	"///            1 - Módulo cliente                                                      ///\n"
 	"///            2 - Módulo Contas                                                       ///\n"
-	"///            3 - Módulo movimento (Depósitos e Saques)                               ///\n"
+	"///            3 - Módulo movimentações                                                ///\n"
 	"///            4 - Módulo Relatórios                                                   ///\n"
 	"///            5 - Sobre o sistema                                                     ///\n"
 	"///            0 - Encerrar o programa                                                 ///\n");

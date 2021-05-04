@@ -14,7 +14,7 @@ int validaCPF (char []);
 // https://repl.it/@flaviusgorgonio/ValidaDataComFuncoesc
 // referência:
 // https://pt.stackoverflow.com/questions/159141/obter-a-data-atual-diretamente-pela-m%C3%A1quina
-int validaData (char[], char[], char[]);
+int validaData (char [], char [], char []);
 
 
 // função bissexto
@@ -23,3 +23,21 @@ int validaData (char[], char[], char[]);
 // código de @flaviusgorgonio:
 // https://repl.it/@flaviusgorgonio/ValidaDataComFuncoesc
 int bissexto(int);
+
+
+// função validaNome
+// Recebe um nome (vetor de char) e verifica se o nome é válido ou não
+// Retorna 1 se o nome for válido, ou 0 caso contrário
+int validaNome (char []);
+
+
+// função validaFloat
+// Recebe um valor (vetor de char) e verifica se o valor é válido ou não
+// Retorna 1 se o valor for válido, ou 0 caso contrário
+int validaFloat(char []);
+
+
+// função converteParaFloat
+// Recebe um valor (vetor de char) converte para float
+// Retorna o valor float
+float converteParaFloat(char []);

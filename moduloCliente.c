@@ -34,9 +34,10 @@ void cadastrarCliente(void) {
 	Cliente* client;
 		
 	client = telaCadastrarCliente();
-  	gravarCliente(client);
+	gravarCliente(client);
 	free(client);
 }
+
 
 
 void pesquisarCliente (void) {
@@ -51,8 +52,8 @@ void pesquisarCliente (void) {
 		getchar();
 	} else {
 		exibirCliente(client);
-		free(client);
 	} 
+	free(client);
 	free(cpf);
 }
 
@@ -61,19 +62,23 @@ void atualizarCliente(void) {
 	Cliente* client;
 	char* cpf;
 
-	cpf = telaAtualizarCliente();
+	// cpf = telaAtualizarCliente();
+	printf("\n"
+	"///            ATUALIZAR CLIENTE:                                                      ///\n");
+	cpf = telaPesquisarCliente();
 	client = buscarCliente(cpf);
 	if (client == NULL) {
 		printf("\n\nCliente não encontrado!\n\n");
 		printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
 		getchar();
 	} else {
-		client = telaCadastrarCliente();
-		strcpy(client->cpf, cpf);
+		// client = telaCadastrarCliente();
+		client = telaAtualizarCliente(client);
+		// strcpy(client->cpf, cpf);
 		regravarCliente(client);
-		free(client);
 	}
 	free(cpf);
+	free(client);
 }
 
 
@@ -91,12 +96,12 @@ void excluirCliente(void) {
   	} else {
 			client->status = False;
 			regravarCliente(client);
-			free(client);
 			printf("\nCliente excluído com sucesso!\n");
 			printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
 			getchar();
 	}
 	free(cpf);
+	free(client);
 }
 
 // função menuCliente
@@ -137,8 +142,11 @@ char menuCliente(void) {
 // Essa função permite ao usuário cadastrar um cliente
 Cliente* telaCadastrarCliente(void) {
 	Cliente *client;
-	// int cpfValido;
+	Cliente *aux;
+	int cpfValido;
 	int dataValida;
+	int nomeValido;
+
 	client = (Cliente*) malloc(sizeof(Cliente));
 	
 	system("clear");
@@ -153,44 +161,36 @@ Cliente* telaCadastrarCliente(void) {
 	"///                                                                                    ///\n"
 	"///            CADASTRAR CLIENTE:                                                      ///\n"
 	"///                                                                                    ///\n");
-	printf("\n"
-	"               Nome completo: ");
-	scanf("%[A-ZÁÉÍÓÚÂÊÔÇÀÃÕ a-záéíóúâêôçàãõ]", client->nome);
-	getchar();
-    printf("\n"
-	"               CPF (apenas números): ");
-	scanf("%[^\n]", client->cpf);
-	getchar();
-	// cpfValido = validaCPF(client->cpf);
-	// while (cpfValido == 0) {
-	// 	printf("\n"
-	// 	"               O cpf informado é inválido. Por favor, tente novamente...\n");
-	// 	printf("\n"
-	// 	"               CPF (apenas números): ");
-	// 	scanf("%[^\n]", client->cpf);
-	// 	getchar();
-	// 	cpfValido = validaCPF(client->cpf);
-	// }
-	printf("\n"
-	"               cpf cadastrado com sucesso!\n");
-	printf("\n"
-	"               Data de nascimento:\n");
-	printf("\n"
-	"               Informe o dia: ");
-	scanf("%[^\n]", client->dia);
-	getchar();
-	printf("\n"
-	"               Informe o mês: ");
-	scanf("%[^\n]", client->mes);
-	getchar();
-	printf("\n"
-	"               Informe o ano: ");
-	scanf("%[^\n]", client->ano);
-	getchar();
-	dataValida = validaData(client->dia, client->mes, client->ano);
-	while (dataValida == 0) {
+	do {
 		printf("\n"
-		"               A data informada é inválida. Por favor, tente novamente...\n");
+		"               Nome completo: ");
+		scanf("%[^\n]", client->nome);
+		getchar();
+		nomeValido = validaNome(client->nome);
+		if (!nomeValido) {
+			printf("               O nome lido é inválido! Por favor tente novamente...\n");
+		}
+	} while (!nomeValido);
+    
+	do {
+		printf("\n"
+		"               CPF (apenas números): ");
+		scanf("%[^\n]", client->cpf);
+		getchar();
+		cpfValido = validaCPF(client->cpf);
+		if (!cpfValido) {
+			printf("\n"
+			"               O cpf informado é inválido! Por favor, tente novamente...\n");
+		}
+		aux = buscarCliente(client->cpf);
+		if (aux != NULL) {
+			printf("\n"
+			"               O cpf informado já está cadastrado! Tente novamente...\n");
+			cpfValido = 0;
+		}
+	} while(!cpfValido);
+	
+	do {
 		printf("\n"
 		"               Data de nascimento:\n");
 		printf("\n"
@@ -205,10 +205,12 @@ Cliente* telaCadastrarCliente(void) {
 		"               Informe o ano: ");
 		scanf("%[^\n]", client->ano);
 		getchar();
-		dataValida = validaData(client->dia, client->mes, client->ano);		
-	}
-	printf("\n"
-	"               Data cadastrada com sucesso!\n");
+		dataValida = validaData(client->dia, client->mes, client->ano);
+		if (!dataValida) {
+			printf("\n"
+			"               A data informada é inválida. Por favor, tente novamente...\n");
+		}
+	} while (!dataValida);
 	client->status = True;
 	printf("\n"
 	"///                                                                                    ///\n"
@@ -225,7 +227,7 @@ Cliente* telaCadastrarCliente(void) {
 // função telaPesquisarCliente
 // Essa função permite ao usuário pesquisar um cliente que esteja cadastrado
 char* telaPesquisarCliente(void) {
-	// int cpfValido;
+	int cpfValido;
 	char* cpf;
 	cpf = (char*) malloc(12*sizeof(char));
 
@@ -242,46 +244,34 @@ char* telaPesquisarCliente(void) {
 	"///            PESQUISAR CLIENTE:                                                      ///\n"
 	"///                                                                                    ///\n"
 	"///                                                                                    ///\n");
-	printf("\n"
-	"               CPF (apenas números): ");
-	scanf("%[0-9]", cpf);
-	getchar();
-	// cpfValido = validaCPF(cpf);
-	// while (cpfValido == 0) {
-	// 	printf("\n"
-	// 	"               O cpf informado é inválido. Por favor, tente novamente...\n");
-	// 	printf("\n"
-	// 	"               CPF (apenas números): ");
-	// 	scanf("%[0-9]", cpf);
-	// 	getchar();
-	// 	cpfValido = validaCPF(cpf);
-	// }                                                         
+	do {
+		printf("\n"
+		"               CPF (apenas números): ");
+		scanf("%[^\n]", cpf);
+		getchar();
+		cpfValido = validaCPF(cpf);
+		if (!cpfValido) {
+			printf("\n"
+			"               O cpf informado é inválido. Por favor, tente novamente...\n");
+		}
+	} while (!cpfValido);                         
 	printf("\n"
 	"///                                                                                    ///\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
 	"\n");
-	// printf("Em desenvolvimento...\n\n");
-	// printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
-	// getchar();
 	return cpf;
 }
-	// "///====================================================================================///\n"
-	// "///            INFORMAÇÕES DO CLIENTE:  (caso esteja cadastrado)                       ///\n"
-	// "///                                                                                    ///\n"
-	// "///            Nome:                                                                   ///\n"
-	// "///            CPF:                                                                    ///\n"
-	// "///            Data de nascimento:                                                     ///\n"
-	// "///                                                                                    ///\n"
-	// "//////////////////////////////////////////////////////////////////////////////////////////\n"
 
 
 // função telaAtualizarCliente
 // Essa função permite ao usuário atualizar um cliente, se este estiver cadastrado
-char* telaAtualizarCliente(void) {
-	char* cpf;
-	cpf = (char*) malloc(12*sizeof(char));
+Cliente* telaAtualizarCliente(Cliente* client) {
+	// char* cpf;
+	char op;
+	int opValida = 0;
+	// cpf = (char*) malloc(12*sizeof(char));
 	// int cpfValido;
-	// char op;
+
 	system("clear");
 	printf("\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -290,51 +280,114 @@ char* telaAtualizarCliente(void) {
 	"///            = = = = = Sistema de Controle de Contas Bancárias = = = = =             ///\n"
 	"///            ===========================================================             ///\n" 
 	"///                                                                                    ///\n"
-	"//////////////////////////////////////////////////////////////////////////////////////////\n"
-	"///                                                                                    ///\n"
-	"///            ATUALIZAR CLIENTE:                                                      ///\n"
-	"///                                                                                    ///\n"
-	"///                                                                                    ///\n");
-	printf("\n"
-	"               CPF (apenas números): ");
-	scanf("%[0-9]", cpf);
-	getchar();
-	// cpfValido = validaCPF(cpf);
-	// while (cpfValido == 0) {
-	// 	printf("\n"
-	// 	"               O cpf informado é inválido. Por favor, tente novamente...\n");
-	// 	printf("\n"
-	// 	"               CPF (apenas números): ");
-	// 	scanf("%[0-9]", cpf);
-	// 	getchar();
-	// 	cpfValido = validaCPF(cpf);
-	// }
-	// printf("\n"
-	// "///====================================================================================///\n"
-	// "///            INFORMAÇÕES DO CLIENTE:  (caso esteja cadastrado)                       ///\n"
-	// "///                                                                                    ///\n"
-	// "///            Nome:                                                                   ///\n"
-	// "///            CPF:                                                                    ///\n"
-	// "///            Data de nascimento:                                                     ///\n"
-	// "///                                                                                    ///\n"
-	// "//////////////////////////////////////////////////////////////////////////////////////////\n"
-	// "///                                                                                    ///\n"
-	// "///            1 - Atualizar nome                                                      ///\n"
-	// "///            2 - Atualizar cpf                                                       ///\n"
-	// "///            3 - Atualizar data de nascimento                                        ///\n"
-	// "///            0 - Voltar ao menu anterior                                             ///\n");
-	// printf("\n"
-	// "               Informe a sua opção: ");
-	// scanf("%c", &op);
-	// getchar();
-	// printf("\n"
-	// "///                                                                                    ///\n"
-	// "//////////////////////////////////////////////////////////////////////////////////////////\n"
-	// "\n");
-	// printf(";Em densevolvimento....\n\n");
-	// printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
-	// getchar();
-	return cpf;
+	"//////////////////////////////////////////////////////////////////////////////////////////\n");
+	do {
+		printf("\n"
+		"///																					///\n"
+		"///            ATUALIZAR CLIENTE:														///\n"
+		"///																					///\n"
+		"///			1 - Atualizar nome														///\n"
+		"///			2 - Atualizar data de nascimento										///\n"
+		"///			3 - Atualizar todos os campos											///\n"
+		"///			0 - Voltar ao menu anterior												///\n");
+		printf("\n"
+		"               Informe a sua opção: ");
+		scanf("%c", &op);
+		getchar();
+		if (op != '1' && op != '2' && op != '3' && op != '0') {
+			system("clear");
+			printf("\n"
+			"               A opção informada é inválida! Por favor tente novamente...\n");
+		} else {
+			opValida = 1;
+		}
+	} while (!opValida);
+	if (op == '1') {
+		int nomeValido;
+		do {
+			printf("\n"
+			"               Nome completo: ");
+			scanf("%[^\n]", client->nome);
+			getchar();
+			nomeValido = validaNome(client->nome);
+			if (!nomeValido) {
+				printf("               O nome lido é inválido! Por favor tente novamente...\n");
+			}
+		} while (!nomeValido);
+		printf("\n"
+		"               Cliente atualizado com sucesso!\n\n");
+		printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
+		getchar();
+	}
+	else if (op == '2') {
+		int dataValida;
+		do {
+			printf("\n"
+			"               Data de nascimento:\n");
+			printf("\n"
+			"               Informe o dia: ");
+			scanf("%[^\n]", client->dia);
+			getchar();
+			printf("\n"
+			"               Informe o mês: ");
+			scanf("%[^\n]", client->mes);
+			getchar();
+			printf("\n"
+			"               Informe o ano: ");
+			scanf("%[^\n]", client->ano);
+			getchar();
+			dataValida = validaData(client->dia, client->mes, client->ano);
+			if (!dataValida) {
+				printf("\n"
+				"               A data informada é inválida. Por favor, tente novamente...\n");
+			}
+		} while (!dataValida);
+		printf("\n"
+		"               Cliente atualizado com sucesso!\n\n");
+		printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
+		getchar();
+	}
+	else if (op == '3') {
+		int nomeValido;
+		int dataValida;
+		do {
+			printf("\n"
+			"               Nome completo: ");
+			scanf("%[^\n]", client->nome);
+			getchar();
+			nomeValido = validaNome(client->nome);
+			if (!nomeValido) {
+				printf("               O nome lido é inválido! Por favor tente novamente...\n");
+			}
+		} while (!nomeValido);
+	
+		do {
+			printf("\n"
+			"               Data de nascimento:\n");
+			printf("\n"
+			"               Informe o dia: ");
+			scanf("%[^\n]", client->dia);
+			getchar();
+			printf("\n"
+			"               Informe o mês: ");
+			scanf("%[^\n]", client->mes);
+			getchar();
+			printf("\n"
+			"               Informe o ano: ");
+			scanf("%[^\n]", client->ano);
+			getchar();
+			dataValida = validaData(client->dia, client->mes, client->ano);
+			if (!dataValida) {
+				printf("\n"
+				"               A data informada é inválida. Por favor, tente novamente...\n");
+			}
+		} while (!dataValida);
+		printf("\n"
+		"               Cliente atualizado com sucesso!\n\n");
+		printf("\t\t\t>>> Tecle <ENTER> para continuar...\n");
+		getchar();
+	}
+	return client;
 }
 
 
@@ -342,7 +395,7 @@ char* telaAtualizarCliente(void) {
 // Essa função permite ao usuário excluir um cliente, se este estiver cadastrado
 char* telaExcluirCliente(void) {
 	char* cpf;
-	// int cpfValido;
+	int cpfValido;
 	cpf = (char*) malloc(12*sizeof(char));
 
 	system("clear");
@@ -357,40 +410,28 @@ char* telaExcluirCliente(void) {
 	"///                                                                                    ///\n"
 	"///            EXCLUIR CLIENTE:                                                        ///\n"
 	"///                                                                                    ///\n");
-	printf("\n"
-	"               CPF (apenas números): ");
-	scanf("%[0-9]", cpf);
-	getchar();
-	// cpfValido = validaCPF(cpf);
-	// while (cpfValido == 0) {
-	// 	printf("\n"
-	// 	"               O cpf informado é inválido. Por favor, tente novamente...\n");
-	// 	printf("\n"
-	// 	"               CPF (apenas números): ");
-	// 	scanf("%[0-9]", cpf);
-	// 	getchar();
-	// 	cpfValido = validaCPF(cpf);
-	// }                                                                                  
+	do {
+		printf("\n"
+		"               CPF (apenas números): ");
+		scanf("%[^\n]", cpf);
+		getchar();
+		cpfValido = validaCPF(cpf);
+		if (!cpfValido) {
+			printf("\n"
+			"               O cpf informado é inválido. Por favor, tente novamente...\n");
+		}
+		if (!cpfValido) {
+			printf("\n"
+			"               O cpf informado é inválido. Por favor, tente novamente...\n");
+		}
+	} while (!cpfValido);                                          
 	printf("\n"
 	"///                                                                                    ///\n"
 	"//////////////////////////////////////////////////////////////////////////////////////////\n"
 	"\n");
 	return cpf;
 }
-	// "///====================================================================================///\n"
-	// "///            INFORMAÇÕES DO CLIENTE:  (caso esteja cadastrado)                       ///\n"
-	// "///                                                                                    ///\n"
-	// "///            Nome:                                                                   ///\n"
-	// "///            CPF:                                                                    ///\n"
-	// "///            Data de nascimento:                                                     ///\n"
-	// "///                                                                                    ///\n"
-	// "///            Confirmar exclusão? (S/N): S                                            ///\n"
-	// "///                                                                                    ///\n"
-	// "///            Cliente excluído com sucesso                                            ///\n"
-	// "///                                                                                    ///\n"
-	// "//////////////////////////////////////////////////////////////////////////////////////////\n"
-	// "//////////////////////////////////////////////////////////////////////////////////////////\n"
-	///ELSE CONTINUE
+
 
 
 
@@ -417,10 +458,11 @@ Cliente* buscarCliente(char* cpf) {
 	client = (Cliente*) malloc(sizeof(Cliente));
 	fp = fopen("clientes.dat", "rb");
 	if (fp == NULL) {
-		printf("Ops! Ocorreu um erro na abertura do arquivo!\n");
-		printf("Não é possível continuar este programa...\n");
-		printf("Programa encerrado!\n");
-		exit(1);
+		// printf("Ops! Ocorreu um erro na abertura do arquivo!\n");
+		// printf("Não é possível continuar este programa...\n");
+		// printf("Programa encerrado!\n");
+		// exit(1);
+		return NULL;
 	}
 	// while(!feof(fp)) {
 	while(fread(client, sizeof(Cliente), 1, fp)) {

@@ -1,10 +1,11 @@
 typedef struct cliente Cliente;
 
 struct cliente {
-	char nome[51];
+	char nome[41];
 	char cpf[12];
 	char dia[3], mes[3], ano[5]; // data de nascimento
 	int status;
+	// struct client *prox;
 };
 
 
@@ -32,7 +33,7 @@ char* telaPesquisarCliente(void);
 
 // função telaAtualizarCliente
 // Essa função permite ao usuário atualizar um cliente, se este estiver cadastrado
-char* telaAtualizarCliente(void);
+Cliente* telaAtualizarCliente(Cliente*);
 
 
 // função telaExcluirCliente

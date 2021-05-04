@@ -1,10 +1,12 @@
 typedef struct movimentacao Movimentacao;
+typedef struct conta Conta;
 
 struct movimentacao {
 	char numConta[10];
 	char dia[3], mes[3], ano[5]; // data
 	char tipo;
-	char valor[15];
+	float valor;
+	// struct movimentacao *prox;
 };
 
 // função moduloMovimentos
@@ -21,7 +23,7 @@ char menuMovimentos(void);
 
 // função telaRealizarSaque
 // Essa função permite ao usuário realizar um saque, se a conta informada estiver cadastrada
-Movimentacao* telaRealizarSaque(void);
+Movimentacao* telaRealizarSaque(Conta*);
 
 
 // função telaRealizarDeposito

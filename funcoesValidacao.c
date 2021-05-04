@@ -187,6 +187,8 @@ int validaData(char dia[3], char mes[3], char ano[5]) {
 	return 1;
 }
 
+
+
 // função bissexto
 // Recebe um ano e verifica se o ano é bissexto ou não
 // Retorna 1 se o ano for bissexto, ou 0 se o ano não for bissexto
@@ -202,4 +204,99 @@ int bissexto(int ano) {
 	else {
 		return 0;
 	}
+}
+
+
+// função validaNome
+// Recebe um nome (vetor de char) e verifica se o nome é válido ou não
+// Retorna 1 se o nome for válido, ou 0 caso contrário
+int validaNome (char nome[41]) {
+	if (strlen(nome) > 40) {
+		return 0;
+	}
+	int tam, letra; 
+	tam = strlen(nome);
+
+	for (int i = 0; i < tam; i++) {
+		if (nome[i] >= 'A' && nome[i] <= 'Z') {
+      		continue;
+		} else if (nome[i] >= 'a' && nome[i] <= 'z') {
+			continue;
+		} else if (nome[i] == ' ') {
+			continue;
+		} else {
+			return 0;
+		}
+  	}
+	return 1;
+}
+
+
+
+
+int validaFloat(char valor[20]) {
+	int acheiVirg = 0;
+	int partDec = 0;
+
+	if (valor[0] == ',' || valor[0] == '.' ||
+		valor[strlen(valor)-1] == ',' ||
+		valor[strlen(valor)-1] == '.') {
+			return 0;
+		}
+
+	// Verificando caracteres válidos
+	for (int i = 0; valor[i] != '\0'; i++) {
+		if (!isdigit(valor[i])) {
+			if (valor[i] == ',' || valor[i] == '.') {
+				acheiVirg += 1;
+			} else {
+				return 0;
+			}
+		} else {
+			if (acheiVirg > 0) {
+				partDec += 1;
+			}
+		}
+	}
+	if (acheiVirg > 1) {
+		return 0;
+	}
+	if (partDec > 2) {
+		return 0;
+	}
+	return 1;
+}
+
+
+
+float converteParaFloat(char valor[20]) {
+	int acheiVirg = 0;
+	float num = 0;
+	int tamPartInt = 0;
+	char virg;
+
+	for (int i = 0; valor[i] != '\0'; i++) {
+		if (!isdigit(valor[i])) {
+			acheiVirg += 1;
+			virg = valor[i];
+		} else if (isdigit(valor[i]) > 0 && acheiVirg == 0) {
+			tamPartInt += 1;
+		}
+	}
+	tamPartInt -= 1;
+	// Convertendo em float
+	if (acheiVirg == 0) {
+		for (int i = 0, i2 = tamPartInt; i < strlen(valor); i++, i2--) {
+			num += (valor[i] - 48) * pow(10, i2);
+		}
+	} else {
+		for (int i = 0, i2 = tamPartInt; i < strlen(valor); i++, i2--) {
+			if (valor[i] != virg) {
+				num += (valor[i] - 48) * pow(10, i2);
+			} else {
+				i2++;
+			}
+		}
+	}
+	return num;
 }

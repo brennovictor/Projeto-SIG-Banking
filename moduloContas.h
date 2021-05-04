@@ -6,7 +6,9 @@ struct conta {
 	char operacao[4];
 	char senha[7];
 	char cpf[12];
+	float saldo;
 	int status;
+	// struct conta *prox;
 };
 
 
@@ -34,8 +36,7 @@ char* telaPesquisarConta(void);
 
 // função telaAtualizarConta
 // Essa função permite ao usuário atualizar uma conta, se esta estiver cadastrada
-char* telaAtualizarConta(void);
-
+Conta* telaAtualizarConta(Conta*);
 
 // função telaExcluirConta
 // Essa função permite ao usuário excluir uma conta, se esta estiver cadastrada
